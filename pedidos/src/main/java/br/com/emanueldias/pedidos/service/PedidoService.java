@@ -1,0 +1,53 @@
+package br.com.emanueldias.pedidos.service;
+
+import br.com.emanueldias.pedidos.dto.PedidoRequestDTO;
+import br.com.emanueldias.pedidos.dto.PedidoResponseDTO;
+import br.com.emanueldias.pedidos.model.Pedido;
+import br.com.emanueldias.pedidos.model.StatusPedido;
+import br.com.emanueldias.pedidos.repository.PedidoRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class PedidoService {
+
+    @Autowired
+    private PedidoRepository repository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public PedidoResponseDTO criaPedido(PedidoRequestDTO dto){
+        Pedido pedido = modelMapper.map(dto, Pedido.class);
+        pedido.setStatusPedido(StatusPedido.REALIZADO);
+        repository.save(pedido);
+
+        return modelMapper.map(pedido, PedidoResponseDTO.class);
+    }
+
+    public PedidoResponseDTO buscaPorId(Long id){
+        Pedido pedido = repository.getReferenceById(id);
+
+        return modelMapper.map(pedido, PedidoResponseDTO.class);
+    }
+
+    public PedidoResponseDTO cancelaPedido(Long id){
+        Pedido pedido = repository.getReferenceById(id);
+        pedido.setStatusPedido(StatusPedido.CANCELADO);
+        repository.save(pedido);
+
+        return modelMapper.map(pedido, PedidoResponseDTO.class);
+    }
+
+    public PedidoResponseDTO pagarPedido(Long id){
+        Pedido pedido = repository.getReferenceById(id);
+        pedido.setStatusPedido(StatusPedido.PAGO);
+        repository.save(pedido);
+
+        return modelMapper.map(pedido, PedidoResponseDTO.class);
+    }
+
+
+}

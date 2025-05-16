@@ -5,14 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name="pedidos")
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pedido {
@@ -26,13 +24,12 @@ public class Pedido {
 
     @NotNull
     @Enumerated(value = EnumType.STRING)
-    private ModoPagamento modoPagamento;
-
-    @NotNull
-    @Enumerated(value = EnumType.STRING)
     private StatusPedido statusPedido;
 
     @ElementCollection
     private List<ItemPedido> itensDoPedido;
 
+    public void setStatusPedido(@NotNull StatusPedido statusPedido) {
+        this.statusPedido = statusPedido;
+    }
 }
