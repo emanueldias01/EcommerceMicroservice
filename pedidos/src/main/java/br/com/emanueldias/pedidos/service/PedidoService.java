@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class PedidoService {
@@ -31,6 +33,12 @@ public class PedidoService {
         Pedido pedido = repository.getReferenceById(id);
 
         return modelMapper.map(pedido, PedidoResponseDTO.class);
+    }
+
+    public List<PedidoResponseDTO> buscaPedidosDoUsuario(Long usuarioId){
+        List<Pedido> pedidoList = repository.findByUsuarioId(usuarioId);
+
+        return pedidoList.stream().map(p -> modelMapper.map(p, PedidoResponseDTO.class)).toList();
     }
 
     public PedidoResponseDTO cancelaPedido(Long id){

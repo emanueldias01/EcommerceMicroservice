@@ -2,17 +2,12 @@ package br.com.emanueldias.pedidos.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name="pedidos")
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class Pedido {
 
     @Id
@@ -28,6 +23,30 @@ public class Pedido {
 
     @ElementCollection
     private List<ItemPedido> itensDoPedido;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<ItemPedido> getItensDoPedido() {
+        return itensDoPedido;
+    }
+
+    public void setItensDoPedido(List<ItemPedido> itensDoPedido) {
+        this.itensDoPedido = itensDoPedido;
+    }
+
+    public @NotNull StatusPedido getStatusPedido() {
+        return statusPedido;
+    }
+
+    public @NotNull Long getUsuarioId() {
+        return usuarioId;
+    }
 
     public void setStatusPedido(@NotNull StatusPedido statusPedido) {
         this.statusPedido = statusPedido;
