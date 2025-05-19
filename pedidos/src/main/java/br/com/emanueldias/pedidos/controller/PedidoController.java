@@ -13,7 +13,7 @@ import java.util.List;
 public class PedidoController {
 
     @Autowired
-    PedidoService service;
+    private PedidoService service;
 
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> criaPedido(@RequestBody PedidoRequestDTO dto){
