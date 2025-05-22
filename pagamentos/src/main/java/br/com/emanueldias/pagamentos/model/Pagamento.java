@@ -14,7 +14,11 @@ public class Pagamento {
     private Long usuarioId;
     private Long pedidoId;
     private BigDecimal valor;
+    @Enumerated(value = EnumType.STRING)
     private FormaPagamento formaPagamento;
+
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
 
     public Pagamento(Long id, Long pedidoId, Long usuarioId, BigDecimal valor) {
         this.formaPagamento = FormaPagamento.NAO_DEFINIDO;
@@ -66,5 +70,13 @@ public class Pagamento {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
