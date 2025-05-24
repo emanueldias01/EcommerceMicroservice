@@ -21,7 +21,7 @@ public class Pedido {
     @Enumerated(value = EnumType.STRING)
     private StatusPedido statusPedido;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<ItemPedido> itensDoPedido;
 
     public Long getId() {
@@ -50,5 +50,9 @@ public class Pedido {
 
     public void setStatusPedido(@NotNull StatusPedido statusPedido) {
         this.statusPedido = statusPedido;
+    }
+
+    public void setUsuarioId(@NotNull Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }
