@@ -1,4 +1,4 @@
-package br.com.emanueldias.pagamentos.config.amqp;
+package br.com.emanueldias.email.amqp;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -14,12 +14,12 @@ import org.springframework.context.annotation.Configuration;
 public class AMQPConfiguration {
 
     @Bean
-    public Queue criaFila(){
-        return new Queue("pedido.pagamento", false);
+    public Queue emailQueue() {
+        return new Queue("pedido.email", false);
     }
 
     @Bean
-    public FanoutExchange fanoutExchangePedido(){
+    public FanoutExchange fanoutExchange() {
         return new FanoutExchange("pedido.ex");
     }
 
@@ -27,6 +27,7 @@ public class AMQPConfiguration {
     public Binding binding(Queue emailQueue, FanoutExchange fanoutExchange) {
         return BindingBuilder.bind(emailQueue).to(fanoutExchange);
     }
+
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter(){

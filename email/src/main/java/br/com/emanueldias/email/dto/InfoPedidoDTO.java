@@ -5,6 +5,6 @@ import java.util.List;
 
 public record InfoPedidoDTO(
         List<String> itens,
-        BigDecimal valor
+        Double valor
 ) {
 }

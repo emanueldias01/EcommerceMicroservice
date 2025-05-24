@@ -26,7 +26,7 @@ public class PedidoController {
         PedidoResponseDTO pedido = service.criaPedido(dto);
         var uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(pedido.getId()).toUri();
 
-        rabbitTemplate.convertAndSend("pedido.realizado", pedido);
+        rabbitTemplate.convertAndSend("pedido.ex", "", pedido);
         return ResponseEntity.created(uri).body(pedido);
     }
 

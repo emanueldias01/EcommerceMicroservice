@@ -1,5 +1,6 @@
 package br.com.emanueldias.pedidos.config.amqp;
 
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -14,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 public class AMQPConfiguration {
 
     @Bean
-    public Queue criaFila(){
-        return new Queue("pedido.realizado", false);
+    public FanoutExchange fanoutExchange(){
+        return new FanoutExchange("pedido.ex");
     }
 
     @Bean

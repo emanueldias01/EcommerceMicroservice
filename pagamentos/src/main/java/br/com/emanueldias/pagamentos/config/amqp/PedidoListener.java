@@ -14,7 +14,7 @@ public class PedidoListener {
     @Autowired
     PagamentoService service;
 
-    @RabbitListener(queues = "pedido.realizado")
+    @RabbitListener(queues = "pedido.pagamento")
     public void recebeMensagem(@Payload PedidoDTO dto){
         System.out.println(dto.getItensDoPedido());
         service.cria(dto);
