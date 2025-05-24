@@ -1,15 +1,19 @@
 package br.com.emanueldias.pagamentos.service;
 
-import br.com.emanueldias.pagamentos.dto.PagamentoRequestDTO;
+import br.com.emanueldias.pagamentos.config.amqp.dto.PedidoDTO;
 import br.com.emanueldias.pagamentos.dto.PagamentoResponseDTO;
 import br.com.emanueldias.pagamentos.dto.PagamentoUpdateFormaPagamentoDTO;
 import br.com.emanueldias.pagamentos.model.FormaPagamento;
 import br.com.emanueldias.pagamentos.model.Pagamento;
 import br.com.emanueldias.pagamentos.model.Status;
 import br.com.emanueldias.pagamentos.repository.PagamentoRepository;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class PagamentoService {
@@ -25,12 +29,17 @@ public class PagamentoService {
         return modelMapper.map(pagamento, PagamentoResponseDTO.class);
     }
 
-    public PagamentoResponseDTO cria(PagamentoRequestDTO dto){
-        //recebe via queue rabbitMq
-        Pagamento pagamento = modelMapper.map(dto, Pagamento.class);
+    public PagamentoResponseDTO cria(PedidoDTO dto){
+        Double valorTotal = dto.getItensDoPedido()
+                .stream()
+                .mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade()).sum();
 
+        Pagamento pagamento = new Pagamento();
         pagamento.setFormaPagamento(FormaPagamento.NAO_DEFINIDO);
         pagamento.setStatus(Status.EM_ABERTO);
+        pagamento.setValor(new BigDecimal(valorTotal));
+        pagamento.setPedidoId(dto.getId());
+        pagamento.setUsuarioId(dto.getUsuarioId());
 
         repository.save(pagamento);
 

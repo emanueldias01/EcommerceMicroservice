@@ -1,6 +1,7 @@
 package br.com.emanueldias.pagamentos.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -11,12 +12,21 @@ public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private Long usuarioId;
+
+    @NotNull
     private Long pedidoId;
+
+    @NotNull
     private BigDecimal valor;
+
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     private FormaPagamento formaPagamento;
 
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     private Status status;
 

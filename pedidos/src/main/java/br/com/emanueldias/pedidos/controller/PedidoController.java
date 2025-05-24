@@ -3,9 +3,11 @@ package br.com.emanueldias.pedidos.controller;
 import br.com.emanueldias.pedidos.dto.PedidoRequestDTO;
 import br.com.emanueldias.pedidos.dto.PedidoResponseDTO;
 import br.com.emanueldias.pedidos.service.PedidoService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -16,9 +18,16 @@ public class PedidoController {
     @Autowired
     private PedidoService service;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @PostMapping
-    public ResponseEntity<PedidoResponseDTO> criaPedido(@RequestBody PedidoRequestDTO dto){
-        return ResponseEntity.ok(service.criaPedido(dto));
+    public ResponseEntity<PedidoResponseDTO> criaPedido(@RequestBody PedidoRequestDTO dto, UriComponentsBuilder uriComponentsBuilder){
+        PedidoResponseDTO pedido = service.criaPedido(dto);
+        var uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(pedido.getId()).toUri();
+
+        rabbitTemplate.convertAndSend("pedido.realizado", pedido);
+        return ResponseEntity.created(uri).body(pedido);
     }
 
     @GetMapping("/{id}")
